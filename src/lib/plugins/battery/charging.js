@@ -1,8 +1,7 @@
 import React from 'react'
-import Component from 'hyper/component'
 import SvgIcon from '../../utils/svg-icon'
 
-export default class Charging extends Component {
+export default class Charging extends React.PureComponent {
   render() {
     return (
       <SvgIcon>
@@ -14,7 +13,7 @@ export default class Charging extends Component {
 
         <style jsx>{`
           .cpu-charging-icon {
-            fill: #fff;
+            fill: #FFBB00;
           }
         `}</style>
       </SvgIcon>

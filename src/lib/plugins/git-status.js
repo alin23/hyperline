@@ -1,7 +1,6 @@
 import exec from 'child_process'
 import shell from 'electron'
 import React from 'react'
-import Component from 'hyper/component'
 
 
 /*
@@ -19,7 +18,7 @@ import Component from 'hyper/component'
 const dirtyColor = '#FFFBB3'
 const pushColor = '#B7E8FF'
 
-class PluginIcon extends Component {
+class PluginIcon extends React.PureComponent {
 }
 
 
@@ -29,7 +28,7 @@ let repoDirty
 let pushArrow
 let pullArrow
 
-export default class GitStatus extends Component {
+export default class GitStatus extends React.PureComponent {
   static displayName() {
     return "git-status"
   }

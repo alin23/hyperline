@@ -1,8 +1,7 @@
 import React from 'react'
-import Component from 'hyper/component'
 import SvgIcon from '../../utils/svg-icon'
 
-export default class Critical extends Component {
+export default class Critical extends React.PureComponent {
   render() {
     return (
       <SvgIcon>
@@ -14,7 +13,7 @@ export default class Critical extends Component {
 
         <style jsx>{`
           .cpu-critical-icon {
-            fill: #fff;
+            fill: #FF3C3F;
           }
         `}</style>
       </SvgIcon>

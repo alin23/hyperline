@@ -1,9 +1,8 @@
 import React from 'react'
-import Component from 'hyper/component'
 import { networkStats } from 'systeminformation'
 import SvgIcon from '../utils/svg-icon'
 
-class PluginIcon extends Component {
+class PluginIcon extends React.PureComponent {
   render() {
     return (
       <SvgIcon>
@@ -31,7 +30,7 @@ class PluginIcon extends Component {
   }
 }
 
-export default class Network extends Component {
+export default class Network extends React.PureComponent {
   static displayName() {
     return 'network'
   }

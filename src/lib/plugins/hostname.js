@@ -1,11 +1,10 @@
 import os from 'os'
 import React from 'react'
-import Component from 'hyper/component'
 import SvgIcon from '../utils/svg-icon'
 
-class PluginIcon extends Component {
+class PluginIcon extends React.PureComponent {
   render() {
-    
+
     return (
       <SvgIcon>
         <g fill="none" fillRule="evenodd">
@@ -19,7 +18,7 @@ class PluginIcon extends Component {
 
         <style jsx>{`
           .hostname-icon {
-            fill: #fff;
+            fill: #9C6E50;
           }
         `}</style>
       </SvgIcon>
@@ -27,7 +26,7 @@ class PluginIcon extends Component {
   }
 }
 
-export default class HostName extends Component {
+export default class HostName extends React.PureComponent {
   static displayName() {
     return 'hostname'
   }
@@ -45,6 +44,7 @@ export default class HostName extends Component {
           .wrapper {
             display: flex;
             align-items: center;
+            color: #EEA87A;
           }
         `}</style>
       </div>

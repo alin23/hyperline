@@ -1,9 +1,22 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Component from 'hyper/component'
 import SvgIcon from '../../utils/svg-icon'
 
-export default class Draining extends Component {
+function getColor(percentage) {
+  if (percentage > 75) {
+    return '#34E280'
+  } else if (percentage > 50) {
+    return '#EE9848'
+  } else if (percentage > 25) {
+    return '#FFBB00'
+  } else if (percentage > 10) {
+    return '#FD6F6B'
+  } else {
+    return '#FF3C3F'
+  }
+}
+
+export default class Draining extends React.PureComponent {
   static propTypes() {
     return {
       percentage: PropTypes.number
@@ -23,16 +36,10 @@ export default class Draining extends Component {
     return (
       <SvgIcon>
         <g fillRule="evenodd">
-          <g className='cpu-discharging-icon'>
+          <g className='cpu-discharging-icon' style={{fill: getColor(this.props.percentage)}}>
             <path d={`M7,1 L9,1 L9,2 L7,2 L7,1 Z M4,2 L12,2 L12,15 L4,15 L4,2 Z ${chargePoint}`}></path>
           </g>
         </g>
-
-        <style jsx>{`
-          .cpu-discharging-icon {
-            fill: #fff;
-          }
-        `}</style>
       </SvgIcon>
     )
   }

@@ -1,9 +1,8 @@
 import React from 'react'
-import Component from 'hyper/component'
 import spotify from 'spotify-node-applescript'
 import SvgIcon from '../utils/svg-icon'
 
-class PluginIcon extends Component {
+class PluginIcon extends React.PureComponent {
   render() {
     return (
       <SvgIcon>
@@ -33,7 +32,7 @@ class PluginIcon extends Component {
   }
 }
 
-export default class Spotify extends Component {
+export default class Spotify extends React.PureComponent {
   static displayName() {
     return 'spotify'
   }
@@ -41,7 +40,10 @@ export default class Spotify extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { version: 'Not running' }
+    this.state = {
+      version: 'Not running',
+      color: '#7AA38E'
+    }
     this.setStatus = this.setStatus.bind(this)
 
     this.handleSpotifyActivation = this.handleSpotifyActivation.bind(this)
@@ -66,9 +68,8 @@ export default class Spotify extends Component {
             console.log(`Caught exception at spotify.getTrack(e): ${err}`)
           }
           this.setState({
-            state: `${st.state === 'playing'
-              ? '▶'
-              : '❚❚'} ${track.artist} - ${track.name}`
+            color: st.state === 'playing' ? '#23D276' : '#615D6E',
+            state: `${track.name} by ${track.artist}`
           })
         })
       })
@@ -104,6 +105,7 @@ export default class Spotify extends Component {
   render() {
     return (
       <div
+        style={{color: this.state.color}}
         className='wrapper'
         onClick={this.handleSpotifyActivation.bind(this)}
       >
@@ -113,7 +115,6 @@ export default class Spotify extends Component {
           .wrapper {
             display: flex;
             align-items: center;
-            color: #1ED760;
           }
         `}</style>
       </div>

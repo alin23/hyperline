@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Component from 'hyper/component'
 
-export default class SvgIcon extends Component {
+export default class SvgIcon extends React.PureComponent {
   static propTypes() {
     return {
       children: PropTypes.element.isRequired

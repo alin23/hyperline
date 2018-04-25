@@ -1,10 +1,9 @@
 import React from 'react'
-import Component from 'hyper/component'
 import { currentLoad as cpuLoad } from 'systeminformation'
 import leftPad from 'left-pad'
 import SvgIcon from '../utils/svg-icon'
 
-class PluginIcon extends Component {
+class PluginIcon extends React.PureComponent {
   render() {
     return (
       <SvgIcon>
@@ -37,7 +36,7 @@ class PluginIcon extends Component {
 
         <style jsx>{`
           .cpu-icon {
-            fill: #fff;
+            fill: #44487D;
           }
         `}</style>
       </SvgIcon>
@@ -45,7 +44,21 @@ class PluginIcon extends Component {
   }
 }
 
-export default class Cpu extends Component {
+function getColor(percentage) {
+  if (percentage > 90) {
+    return '#FF3C3F'
+  } else if (percentage > 70) {
+    return '#FD6F6B'
+  } else if (percentage > 55) {
+    return '#FFBB00'
+  } else if (percentage > 30) {
+    return '#EE9848'
+  } else {
+    return '#34E280'
+  }
+}
+
+export default class Cpu extends React.PureComponent {
   static displayName() {
     return 'cpu'
   }
@@ -54,14 +67,16 @@ export default class Cpu extends Component {
     super(props)
 
     this.state = {
-      cpuLoad: 0
+      cpuLoad: 0,
+      color: '#34E280'
     }
   }
 
   getCpuLoad() {
     cpuLoad().then(({ currentload }) =>
       this.setState({
-        cpuLoad: leftPad(currentload.toFixed(2), 2, 0)
+        cpuLoad: leftPad(currentload.toFixed(2), 2, 0),
+        color: getColor(currentload)
       })
     )
   }
@@ -77,7 +92,7 @@ export default class Cpu extends Component {
 
   render() {
     return (
-      <div className='wrapper'>
+      <div className='wrapper' style={{color: this.state.color}}>
         <PluginIcon /> {this.state.cpuLoad}
 
         <style jsx>{`

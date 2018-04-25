@@ -1,10 +1,9 @@
 import React from 'react'
-import Component from 'hyper/component'
 import { mem as memoryData } from 'systeminformation'
 import leftPad from 'left-pad'
 import SvgIcon from '../utils/svg-icon'
 
-class PluginIcon extends Component {
+class PluginIcon extends React.PureComponent {
   render() {
     return (
       <SvgIcon>
@@ -31,7 +30,7 @@ class PluginIcon extends Component {
 
         <style jsx>{`
           .memory-icon {
-            fill: #fff;
+            fill: #4E6F83;
           }
         `}</style>
 
@@ -40,7 +39,21 @@ class PluginIcon extends Component {
   }
 }
 
-export default class Memory extends Component {
+function getColor(percentage) {
+  if (percentage > 90) {
+    return '#FF3C3F'
+  } else if (percentage > 70) {
+    return '#FD6F6B'
+  } else if (percentage > 55) {
+    return '#FFBB00'
+  } else if (percentage > 30) {
+    return '#EE9848'
+  } else {
+    return '#34E280'
+  }
+}
+
+export default class Memory extends React.PureComponent {
   static displayName() {
     return 'memory'
   }
@@ -50,7 +63,8 @@ export default class Memory extends Component {
 
     this.state = {
       activeMemory: 0,
-      totalMemory: 0
+      totalMemory: 0,
+      color: '#34E280'
     }
 
     this.getMemory = this.getMemory.bind(this)
@@ -68,13 +82,14 @@ export default class Memory extends Component {
 
   getMemory() {
     return memoryData().then(memory => {
-      const totalMemory = this.getMb(memory.total)
-      const activeMemory = this.getMb(memory.active)
-      const totalWidth = totalMemory.toString().length
+      const totalMemory = this.getGb(memory.total, 0)
+      const activeMemory = this.getGb(memory.active)
+      const percentage = Math.floor((activeMemory / totalMemory) * 100)
 
       return {
-        activeMemory: leftPad(activeMemory, totalWidth, 0),
-        totalMemory
+        activeMemory: activeMemory,
+        totalMemory,
+        color: getColor(percentage)
       }
     })
   }
@@ -88,10 +103,15 @@ export default class Memory extends Component {
     return (bytes / 1048576).toFixed(0)
   }
 
+  getGb(bytes, precision = 2) {
+    // 1024 * 1024 * 1024 = 1073741824
+    return (bytes / 1073741824).toFixed(precision)
+  }
+
   render() {
     return (
-      <div className='wrapper'>
-        <PluginIcon /> {this.state.activeMemory}MB / {this.state.totalMemory}MB
+      <div className='wrapper' style={{color: this.state.color}}>
+        <PluginIcon /> {this.state.activeMemory}GB / {this.state.totalMemory}GB
 
         <style jsx>{`
           .wrapper {

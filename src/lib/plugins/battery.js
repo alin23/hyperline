@@ -2,11 +2,26 @@
 // Note: This is to stop XO from complaining about {navigator}
 
 import React from 'react'
-import Component from 'hyper/component'
 import leftPad from 'left-pad'
 import BatteryIcon from './battery/battery-icon'
 
-export default class Battery extends Component {
+function getColor(percentage, charging) {
+  if (charging) {
+    return '#FFBB00'
+  } else if (percentage > 75) {
+    return '#34E280'
+  } else if (percentage > 50) {
+    return '#EE9848'
+  } else if (percentage > 25) {
+    return '#F2C449'
+  } else if (percentage > 10) {
+    return '#FD6F6B'
+  } else {
+    return '#FF3C3F'
+  }
+}
+
+export default class Battery extends React.PureComponent {
   static displayName() {
     return 'battery'
   }
@@ -16,7 +31,8 @@ export default class Battery extends Component {
 
     this.state = {
       charging: false,
-      percentage: '--'
+      percentage: '--',
+      color: '#34E280'
     }
 
     this.batteryEvents = [ 'chargingchange', 'chargingtimechange', 'dischargingtimechange', 'levelchange' ]
@@ -24,9 +40,11 @@ export default class Battery extends Component {
   }
 
   setBatteryStatus(battery) {
+    const level = Math.floor(battery.level * 100)
     this.setState({
       charging: battery.charging,
-      percentage: Math.floor(battery.level * 100)
+      percentage: level,
+      color: getColor(level, battery.charging)
     })
   }
 
@@ -56,7 +74,11 @@ export default class Battery extends Component {
     const { charging, percentage } = this.state
 
     return (
-      <div className='wrapper'>
+      <div
+        style={{
+          color: this.state.color
+        }}
+        className='wrapper'>
         <BatteryIcon charging={charging} percentage={Number(percentage)} /> {leftPad(percentage, 2, 0)}%
 
         <style jsx>{`

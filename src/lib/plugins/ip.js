@@ -1,7 +1,7 @@
 import React from 'react'
-import Component from 'hyper/component'
 import publicIp from 'public-ip'
 import SvgIcon from '../utils/svg-icon'
+import os from 'os'
 
 function getIp() {
   return new Promise(resolve => {
@@ -9,7 +9,18 @@ function getIp() {
   })
 }
 
-class PluginIcon extends Component {
+function getLocalIp() {
+  const ifs = os.networkInterfaces()
+  for (name in ifs) {
+    var ipv4 = ifs[name].find((ni) => ni.family === 'IPv4')
+    if (ipv4 !== undefined && ipv4.address !== '127.0.0.1') {
+      return ipv4.address
+    }
+  }
+  return '?.?.?.?'
+}
+
+class PluginIcon extends React.PureComponent {
   render() {
     return (
       <SvgIcon>
@@ -26,7 +37,7 @@ class PluginIcon extends Component {
         </g>
         <style jsx>{`
           .ip-icon {
-            fill: #fff;
+            fill: #C8516B;
           }
         `}</style>
       </SvgIcon>
@@ -34,7 +45,7 @@ class PluginIcon extends Component {
   }
 }
 
-export default class Ip extends Component {
+export default class Ip extends React.PureComponent {
   static displayName() {
     return 'ip'
   }
@@ -43,20 +54,27 @@ export default class Ip extends Component {
     super(props)
 
     this.state = {
-      ip: '?.?.?.?'
+      ip: '?.?.?.?',
+      localIp: '?.?.?.?'
     }
 
     this.setIp = this.setIp.bind(this)
+    this.setLocalIp = this.setLocalIp.bind(this)
   }
 
   setIp() {
     getIp().then(ip => this.setState({ ip }))
   }
 
+  setLocalIp() {
+    this.setState({localIp: getLocalIp()})
+  }
+
   componentDidMount() {
     // Every 5 seconds
     this.setIp()
-    this.interval = setInterval(() => this.setIp(), 60000 * 5)
+    this.setLocalIp()
+    this.interval = setInterval(() => {this.setIp(); this.setLocalIp()}, 60000 * 5)
   }
 
   componentWillUnmount() {
@@ -66,12 +84,13 @@ export default class Ip extends Component {
   render() {
     return (
       <div className='wrapper'>
-        <PluginIcon /> {this.state.ip}
+        <PluginIcon /> {`${this.state.localIp} / ${this.state.ip}`}
 
         <style jsx>{`
           .wrapper {
             display: flex;
             align-items: center;
+            color: #F06181;
           }
         `}</style>
       </div>
